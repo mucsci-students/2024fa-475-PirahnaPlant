@@ -8,6 +8,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
@@ -25,20 +26,22 @@ public class Health : MonoBehaviour
 	public bool isPlayer = false;				// Whether or not this health is the player
 	public GameObject deathCam;					// The camera to activate when the player dies
 
-	private bool dead = false;					// Used to make sure the Die() function isn't called twice
+	private bool dead = false;                  // Used to make sure the Die() function isn't called twice
+
+	[SerializeField] Slider healthbar;
 
 	// Use this for initialization
 	void Start()
 	{
 		// Initialize the currentHealth variable to the value specified by the user in startingHealth
 		currentHealth = startingHealth;
-	}
+    }
 
 	public void ChangeHealth(float amount)
 	{
 		// Change the health by the amount specified in the amount variable
 		currentHealth += amount;
-
+		healthbar.value = currentHealth - maxHealth;
 		// If the health runs out, then Die.
 		if (currentHealth <= 0 && !dead && canDie)
 			Die();
