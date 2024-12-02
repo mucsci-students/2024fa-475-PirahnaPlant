@@ -20,56 +20,8 @@ using System.Collections.Generic;
 using TMPro;
 
 
-	
-public enum WeaponType
-{
-	Projectile,
-	Raycast,
-	Beam
-}
-public enum Auto
-{
-	Full,
-	Semi
-}
-public enum BulletHoleSystem
-{
-	Tag,
-	Material,
-	Physic_Material
-}
-
-
-[System.Serializable]
-public class SmartBulletHoleGroup
-{
-	public string tag;
-	public Material material;
-	public PhysicMaterial physicMaterial;
-	public BulletHolePool bulletHole;
-	
-	public SmartBulletHoleGroup()
-	{
-		tag = "Everything";
-		material = null;
-		physicMaterial = null;
-		bulletHole = null;
-	}
-	public SmartBulletHoleGroup(string t, Material m, PhysicMaterial pm, BulletHolePool bh)
-	{
-		tag = t;
-		material = m;
-		physicMaterial = pm;
-		bulletHole = bh;
-	}
-}
-
-
-
-
-
 // The Weapon class itself handles the weapon mechanics
-public class Weapon : MonoBehaviour
+public class TurretWeapon : MonoBehaviour
 {
 	
 
@@ -182,19 +134,7 @@ public class Weapon : MonoBehaviour
 	public GameObject[] hitEffects =
         new GameObject[] {null};						// Effects to be displayed where the "bullet" hit
 
-	// Bullet Holes
-	public bool makeBulletHoles = true;					// Whether or not bullet holes should be made
-	public BulletHoleSystem bhSystem = BulletHoleSystem.Tag;	// What condition the dynamic bullet holes should be based off
-	public List<string> bulletHolePoolNames = new
-		List<string>();									// A list of strings holding the names of bullet hole pools in the scene
-	public List<string> defaultBulletHolePoolNames =
-		new List<string>();								// A list of strings holding the names of default bullet hole pools in the scene
-	public List<SmartBulletHoleGroup> bulletHoleGroups =
-		new List<SmartBulletHoleGroup>();				// A list of bullet hole groups.  Each one holds a tag for GameObjects that might be hit, as well as a corresponding bullet hole
-    public List<BulletHolePool> defaultBulletHoles = 
-        new List<BulletHolePool>();                     // A list of default bullet holes to be instantiated when none of the custom parameters are met
-	public List<SmartBulletHoleGroup> bulletHoleExceptions =
-		new List<SmartBulletHoleGroup>();				// A list of SmartBulletHoleGroup objects that defines conditions for when no bullet hole will be instantiated.
+					// A list of SmartBulletHoleGroup objects that defines conditions for when no bullet hole will be instantiated.
 														// In other words, the bullet holes in the defaultBulletHoles list will be instantiated on any surface except for
 														// the ones specified in this list.
 
@@ -261,27 +201,7 @@ public class Weapon : MonoBehaviour
         if (crosshairTexture == null)
             crosshairTexture = new Texture2D(0, 0);
 
-		// Initialize the bullet hole pools list
-		for (int i = 0; i < bulletHolePoolNames.Count; i++)
-		{
-			GameObject g = GameObject.Find(bulletHolePoolNames[i]);
-
-			if (g != null && g.GetComponent<BulletHolePool>() != null)
-				bulletHoleGroups[i].bulletHole = g.GetComponent<BulletHolePool>();
-			else
-				Debug.LogWarning("Bullet Hole Pool does not exist or does not have a BulletHolePool component.  Please assign GameObjects in the inspector that have the BulletHolePool component.");
-		}
 		
-		// Initialize the default bullet hole pools list
-		for (int i = 0; i < defaultBulletHolePoolNames.Count; i++)
-		{
-			GameObject g = GameObject.Find(defaultBulletHolePoolNames[i]);
-
-			if (g.GetComponent<BulletHolePool>() != null)
-				defaultBulletHoles[i] = g.GetComponent<BulletHolePool>();
-			else
-				Debug.LogWarning("Default Bullet Hole Pool does not have a BulletHolePool component.  Please assign GameObjects in the inspector that have the BulletHolePool component.");
-		}
 	}
 	
 	// Update is called once per frame
@@ -653,120 +573,6 @@ public class Weapon : MonoBehaviour
 				// Bullet Holes
 
 				// Make sure the hit GameObject is not defined as an exception for bullet holes
-				bool exception = false;
-				if (bhSystem == BulletHoleSystem.Tag)
-				{
-					foreach (SmartBulletHoleGroup bhg in bulletHoleExceptions)
-					{
-						if (hit.collider.gameObject.tag == bhg.tag)
-						{
-							exception = true;
-							break;
-						}
-					}
-				}
-				else if (bhSystem == BulletHoleSystem.Material)
-				{
-					foreach (SmartBulletHoleGroup bhg in bulletHoleExceptions)
-					{
-						MeshRenderer mesh = FindMeshRenderer(hit.collider.gameObject);
-						if (mesh != null)
-						{
-							if (mesh.sharedMaterial == bhg.material)
-							{
-								exception = true;
-								break;
-							}
-						}
-					}
-				}
-				else if (bhSystem == BulletHoleSystem.Physic_Material)
-				{
-					foreach (SmartBulletHoleGroup bhg in bulletHoleExceptions)
-					{
-						if (hit.collider.sharedMaterial == bhg.physicMaterial)
-						{
-							exception = true;
-							break;
-						}
-					}
-				}
-
-				// Select the bullet hole pools if there is no exception
-				if (makeBulletHoles && !exception)
-				{
-					// A list of the bullet hole prefabs to choose from
-					List<SmartBulletHoleGroup> holes = new List<SmartBulletHoleGroup>();
-					
-					// Display the bullet hole groups based on tags
-                    if (bhSystem == BulletHoleSystem.Tag)
-					{
-                        foreach (SmartBulletHoleGroup bhg in bulletHoleGroups)
-                        {
-                            if (hit.collider.gameObject.tag == bhg.tag)
-							{
-								holes.Add(bhg);
-							}
-                        }
-					}
-
-                    // Display the bullet hole groups based on materials
-					else if (bhSystem == BulletHoleSystem.Material)
-					{
-                        // Get the mesh that was hit, if any
-                        MeshRenderer mesh = FindMeshRenderer(hit.collider.gameObject);
-
-                        foreach (SmartBulletHoleGroup bhg in bulletHoleGroups)
-                        {
-							if (mesh != null)
-							{
-								if (mesh.sharedMaterial == bhg.material)
-								{
-									holes.Add(bhg);
-								}
-							}
-                        }
-					}
-
-                    // Display the bullet hole groups based on physic materials
-					else if (bhSystem == BulletHoleSystem.Physic_Material)
-					{
-                        foreach (SmartBulletHoleGroup bhg in bulletHoleGroups)
-                        {
-                            if (hit.collider.sharedMaterial == bhg.physicMaterial)
-                            {
-                                holes.Add(bhg);
-                            }
-                        }
-					}
-
-
-					SmartBulletHoleGroup sbhg = null;
-					
-					// If no bullet holes were specified for this parameter, use the default bullet holes
-					if (holes.Count == 0)   // If no usable (for this hit GameObject) bullet holes were found...
-					{
-						List<SmartBulletHoleGroup> defaultsToUse = new List<SmartBulletHoleGroup>();
-						foreach (BulletHolePool h in defaultBulletHoles)
-						{
-							defaultsToUse.Add(new SmartBulletHoleGroup("Default", null, null, h));
-						}
-						
-						// Choose a bullet hole at random from the list
-						sbhg = defaultsToUse[Random.Range(0, defaultsToUse.Count)];
-					}
-					
-					// Make the actual bullet hole GameObject
-					else
-					{
-						// Choose a bullet hole at random from the list
-						sbhg = holes[Random.Range(0, holes.Count)];
-					}
-
-					// Place the bullet hole in the scene
-					if (sbhg.bulletHole != null)
-						sbhg.bulletHole.PlaceBulletHole(hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));
-				}
 				
 				// Hit Effects
 				if (makeHitEffects)
