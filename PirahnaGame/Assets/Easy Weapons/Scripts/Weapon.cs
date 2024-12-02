@@ -17,7 +17,10 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
+
+	
 public enum WeaponType
 {
 	Projectile,
@@ -68,6 +71,8 @@ public class SmartBulletHoleGroup
 // The Weapon class itself handles the weapon mechanics
 public class Weapon : MonoBehaviour
 {
+	
+
 	// Weapon Type
 	public WeaponType type = WeaponType.Projectile;		// Which weapon system should be used
 	
@@ -118,6 +123,7 @@ public class Weapon : MonoBehaviour
 	private bool beaming = false;						// Whether or not the weapon is currently firing a beam - used to make sure StopBeam() is called after the beam is no longer being fired
 
 	// Power
+	public AmmoUI ammoUI;
 	public float power = 80.0f;							// The amount of power this weapon has (how much damage it can cause) (if the type is raycast or beam)
 	public float forceMultiplier = 10.0f;				// Multiplier used to change the amount of force applied to rigid bodies that are shot
 	public float beamPower = 1.0f;						// Used to determine damage caused by beam weapons.  This will be much lower because this amount is applied to the target every frame while firing
@@ -134,7 +140,7 @@ public class Weapon : MonoBehaviour
 	public bool infiniteAmmo = false;					// Whether or not this weapon should have unlimited ammo
 	public int ammoCapacity = 12;						// The number of rounds this weapon can fire before it has to reload
 	public int shotPerRound = 1;						// The number of "bullets" that will be fired on each round.  Usually this will be 1, but set to a higher number for things like shotguns with spread
-	private int currentAmmo;							// How much ammo the weapon currently has
+	public int currentAmmo;							// How much ammo the weapon currently has
 	public float reloadTime = 2.0f;						// How much time it takes to reload the weapon
 	public bool showCurrentAmmo = true;					// Whether or not the current ammo should be displayed in the GUI
 	public bool reloadAutomatically = true;				// Whether or not the weapon should reload automatically when out of ammo
@@ -555,7 +561,8 @@ public class Weapon : MonoBehaviour
 		if (showCurrentAmmo)
 		{
 			if (type == WeaponType.Raycast || type == WeaponType.Projectile)
-				GUI.Label(new Rect(10, Screen.height - 30, 100, 20), "Ammo: " + currentAmmo);
+				GUI.Label(new Rect(10, Screen.height - 30, 100, 20), "Ammo: " + currentAmmo + " /" + ammoCapacity);
+				//textUpdater.UpdateUIText("Ammo: ", 50, 200);
 			else if (type == WeaponType.Beam)
 				GUI.Label(new Rect(10, Screen.height - 30, 100, 20), "Heat: " + (int)(beamHeat * 100) + "/" + (int)(maxBeamHeat * 100));
 		}

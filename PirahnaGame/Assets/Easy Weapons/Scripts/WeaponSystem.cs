@@ -13,7 +13,7 @@ public class WeaponSystem : MonoBehaviour
 	public GameObject[] weapons;				// The array that holds all the weapons that the player has
 	public int startingWeaponIndex = 0;			// The weapon index that the player will start with
 	private int weaponIndex;					// The current index of the active weapon
-
+	public AmmoUI ammoUI;
 
 	// Use this for initialization
 	void Start()
@@ -21,6 +21,10 @@ public class WeaponSystem : MonoBehaviour
 		// Make sure the starting active weapon is the one selected by the user in startingWeaponIndex
 		weaponIndex = startingWeaponIndex;
 		SetActiveWeapon(weaponIndex);
+		ammoUI.currentWeapon = weapons[weaponIndex].GetComponent<Weapon>();
+
+        // Update the ammo UI
+        ammoUI.UpdateAmmoUI();
 	}
 	
 	// Update is called once per frame
@@ -51,6 +55,12 @@ public class WeaponSystem : MonoBehaviour
 			NextWeapon();
 		if (Input.GetAxis("Mouse ScrollWheel") < 0)
 			PreviousWeapon();
+
+			// Update the currentWeapon reference in AmmoUI
+        ammoUI.currentWeapon = weapons[weaponIndex].GetComponent<Weapon>();
+
+        // Update the ammo UI
+        ammoUI.UpdateAmmoUI();
 	}
 
 	void OnGUI()
@@ -85,6 +95,12 @@ public class WeaponSystem : MonoBehaviour
 
 		// Activate the one weapon that we want
 		weapons[index].SetActive(true);
+
+		// Update the currentWeapon reference in AmmoUI
+        ammoUI.currentWeapon = weapons[weaponIndex].GetComponent<Weapon>();
+
+        // Update the ammo UI
+        ammoUI.UpdateAmmoUI();
 	}
 
 	public void NextWeapon()
