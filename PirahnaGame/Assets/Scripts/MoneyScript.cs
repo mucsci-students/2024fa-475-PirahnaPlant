@@ -7,19 +7,19 @@ public class MoneyScript : MonoBehaviour
     private int totalCoins = 0;
     
  void addToBalance(){
-    if(totalCoins = 0){
+    if(totalCoins == 0){
 
     }
-    if(totalCoins = 0) {
+    if(totalCoins == 0) {
 
     }
-    if(totalCoins = 0){
+    if(totalCoins == 0){
 
     } 
-    if(totalCoins = 0){
+    if(totalCoins == 0){
 
     }
-    if(totalCoins = 0){
+    if(totalCoins == 0){
 
     }
     
@@ -29,7 +29,7 @@ void subBalance(){
 
 }
 
-void getBalance(){
+public int getBalance(){
     return totalCoins;
 }
 
