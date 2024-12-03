@@ -9,11 +9,13 @@ public class TurretTargeting : MonoBehaviour
     public float attackInterval = 1f;
     public Weapon turretWeapon;
     public Transform shootSpot;
+    public bool disabled = true;
 
     private float lastAttackTime = 0f;
 
     void Update()
     {
+        if(!disabled){
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
         bool enemyInRange = false;
@@ -42,11 +44,20 @@ public class TurretTargeting : MonoBehaviour
         {
             target = null;
         }
+        }
+    }
+
+    public void enableTurret(){
+        disabled = false;
+    }
+
+    public void disableTurret(){
+        disabled =  true;
     }
 
     private void AimAtTarget()
     {
-        if (target != null)
+        if (target != null && !disabled)
         {
             // Calculate the direction to the target
             Vector3 directionToTarget = target.position - transform.position;
@@ -62,7 +73,7 @@ public class TurretTargeting : MonoBehaviour
 
     private void TryFireWeapon()
     {
-        if (Time.time >= lastAttackTime + attackInterval)
+        if (Time.time >= lastAttackTime + attackInterval && !disabled)
         {
             if (shootSpot != null)
             {
