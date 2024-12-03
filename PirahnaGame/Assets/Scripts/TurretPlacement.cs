@@ -6,10 +6,12 @@ public class TurretPlacement : MonoBehaviour
 {
     [SerializeField] GameObject[] turrets;
     [SerializeField] GameObject currentTurret;
+
+    private Transform currentTransform;
     
     private int index = -1;
 
-    private float rotationSpeed = 50f;
+    private float rotationSpeed = 200f;
     // Start is called before the first frame update
     void Start()
     {
@@ -81,7 +83,42 @@ public class TurretPlacement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.T))
         {
-            currentTurret = null;
+            if (index == 0)
+            {
+                currentTransform = currentTurret.transform;
+                Destroy(currentTurret);
+                currentTurret = Instantiate(turrets[4]);
+                currentTurret.transform.position = currentTransform.position;
+                currentTurret.transform.rotation = currentTransform.rotation;
+                currentTurret = null;
+            } else if (currentTurret == turrets[1])
+            {
+                currentTransform = currentTurret.transform;
+                Destroy(currentTurret);
+                currentTurret = Instantiate(turrets[5]);
+                currentTurret.transform.position = currentTransform.position;
+                currentTurret.transform.rotation = currentTransform.rotation;
+                currentTurret = null;
+            } else if (currentTurret == turrets[2]) {
+                currentTransform = currentTurret.transform;
+                Destroy(currentTurret);
+                currentTurret = Instantiate(turrets[6]);
+                currentTurret.transform.position = currentTransform.position;
+                currentTurret.transform.rotation = currentTransform.rotation;
+                currentTurret = null;
+            } else if (currentTurret == turrets[3]) {
+                currentTransform = currentTurret.transform;
+                Destroy(currentTurret);
+                currentTurret = Instantiate(turrets[7]);
+                currentTurret.transform.position = currentTransform.position;
+                currentTurret.transform.rotation = currentTransform.rotation;
+                currentTurret = null;
+            }
+
+
+            // Original Code
+            //currentTurret = null;
+
         }
     }
 }
