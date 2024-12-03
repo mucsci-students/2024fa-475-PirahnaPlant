@@ -8,7 +8,6 @@ public class TurretTargeting : MonoBehaviour
     public float detectionRange = 15f;
     public float attackInterval = 1f;
     public Weapon turretWeapon;
-    public Transform turretModel;
     public Transform shootSpot;
 
     private float lastAttackTime = 0f;
@@ -49,10 +48,14 @@ public class TurretTargeting : MonoBehaviour
     {
         if (target != null)
         {
+            // Calculate the direction to the target
             Vector3 directionToTarget = target.position - transform.position;
-            directionToTarget.y = 0f;
+            directionToTarget.y = 0f; // Keep the rotation on the horizontal plane
 
+            // Create a rotation that faces the target
             Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
+
+            // Rotate the entire turret object around its original position (pivot point)
             transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * 200f);
         }
     }
