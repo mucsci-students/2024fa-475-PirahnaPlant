@@ -626,7 +626,7 @@ public class Weapon : MonoBehaviour
 				
 				if (shooterAIEnabled)
 				{
-					hit.transform.SendMessageUpwards("Damage", damage / 100, SendMessageOptions.DontRequireReceiver);
+					hit.transform.SendMessageUpwards("Damage", -damage, SendMessageOptions.DontRequireReceiver);
 				}
 
 				if (bloodyMessEnabled)
