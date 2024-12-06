@@ -324,6 +324,9 @@ public class Weapon : MonoBehaviour
 		}
 	}
 
+	public bool isBeam(){
+		return (type == WeaponType.Beam);
+	}
 	// Checks for user input to use the weapons - only if this weapon is player-controlled
 	void CheckForUserInput()
 	{
