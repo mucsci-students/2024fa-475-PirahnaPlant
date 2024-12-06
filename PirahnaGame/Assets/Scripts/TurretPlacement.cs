@@ -91,7 +91,7 @@ public class TurretPlacement : MonoBehaviour
                 currentTurret.transform.position = currentTransform.position;
                 currentTurret.transform.rotation = currentTransform.rotation;
                 currentTurret = null;
-            } else if (currentTurret == turrets[1])
+            } else if (index == 1)
             {
                 currentTransform = currentTurret.transform;
                 Destroy(currentTurret);
@@ -99,14 +99,14 @@ public class TurretPlacement : MonoBehaviour
                 currentTurret.transform.position = currentTransform.position;
                 currentTurret.transform.rotation = currentTransform.rotation;
                 currentTurret = null;
-            } else if (currentTurret == turrets[2]) {
+            } else if (index == 2) {
                 currentTransform = currentTurret.transform;
                 Destroy(currentTurret);
                 currentTurret = Instantiate(turrets[6]);
                 currentTurret.transform.position = currentTransform.position;
                 currentTurret.transform.rotation = currentTransform.rotation;
                 currentTurret = null;
-            } else if (currentTurret == turrets[3]) {
+            } else if (index == 3) {
                 currentTransform = currentTurret.transform;
                 Destroy(currentTurret);
                 currentTurret = Instantiate(turrets[7]);

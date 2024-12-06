@@ -22,25 +22,31 @@ public class Health : MonoBehaviour
 	public bool makeExplosion = false;			// Whether or not an explosion prefab should be instantiated
 	public GameObject explosion;				// The explosion prefab to be instantiated
 
-	public bool isPlayer = false;				// Whether or not this health is the player
+	public bool isPlayer = false;               // Whether or not this health is the player
+	public bool isEnemy = false;				// Whether or not this health is an enemy
 	public GameObject deathCam;					// The camera to activate when the player dies
 
 	private bool dead = false;                  // Used to make sure the Die() function isn't called twice
 
 	[SerializeField] Slider healthbar;
 
+	private EnemyAnimations animScript;
+
 	// Use this for initialization
 	void Start()
 	{
 		// Initialize the currentHealth variable to the value specified by the user in startingHealth
 		currentHealth = maxHealth;
+		healthbar.maxValue = maxHealth;
+		healthbar.value = currentHealth;
+		animScript = GetComponent<EnemyAnimations>();
     }
 
 	public void ChangeHealth(float amount)
 	{
 		// Change the health by the amount specified in the amount variable
 		currentHealth += amount;
-		healthbar.value = currentHealth - maxHealth;
+		healthbar.value = currentHealth;
 		// If the health runs out, then Die.
 		if (currentHealth <= 0 && !dead && canDie)
 			Die();
@@ -62,6 +68,11 @@ public class Health : MonoBehaviour
 
 		if (isPlayer && deathCam != null)
 			deathCam.SetActive(true);
+
+		if (isEnemy)
+		{
+			animScript.DeathAnim();
+		}
 
 		// Remove this GameObject from the scene
 		Destroy(gameObject);
