@@ -4,33 +4,36 @@ using UnityEngine;
 
 public class MoneyScript : MonoBehaviour
 {
-    private int totalCoins = 0;
+    public int totalCoins = 0;
+    //public GameObject player;
     
- void addToBalance(){
-    if(totalCoins == 0){
-
+    void Start(){
+    gameObject.GetComponent<FirstPersonCharacter>().updateMoney(totalCoins);
     }
-    if(totalCoins == 0) {
 
+    public void addToBalance(int update){
+        
+        gameObject.GetComponent<FirstPersonCharacter>().updateMoney(update);
+        totalCoins = gameObject.GetComponent<FirstPersonCharacter>().money;
+        
+        
     }
-    if(totalCoins == 0){
 
-    } 
-    if(totalCoins == 0){
-
+    public bool canBuy(int cost){
+        if(gameObject.GetComponent<FirstPersonCharacter>().money < cost){
+            return false;
+        }
+        return true;
     }
-    if(totalCoins == 0){
 
+    public void buyItem(int cost){
+        if(canBuy(cost)){
+        addToBalance(-cost);
+        }
     }
-    
-}
 
-void subBalance(){
-
-}
-
-public int getBalance(){
-    return totalCoins;
-}
+    public int getBalance(){
+        return gameObject.GetComponent<FirstPersonCharacter>().money;
+    }
 
 }

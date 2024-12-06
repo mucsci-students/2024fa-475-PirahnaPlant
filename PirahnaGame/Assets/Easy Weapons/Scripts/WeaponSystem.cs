@@ -14,6 +14,11 @@ public class WeaponSystem : MonoBehaviour
 	public int startingWeaponIndex = 0;			// The weapon index that the player will start with
 	private int weaponIndex;					// The current index of the active weapon
 	public AmmoUI ammoUI;
+	public bool shotGunActive2 = false;
+	public bool m4Active3 = false;
+	public bool beamActive1 = false;
+	public bool railGunActive4 = false;
+	public bool pistol0 = true;
 
 	// Use this for initialization
 	void Start()
@@ -31,7 +36,7 @@ public class WeaponSystem : MonoBehaviour
 	void Update()
 	{
 		// Allow the user to instantly switch to any weapon
-		if (Input.GetButtonDown("Weapon 1"))
+		/*if (Input.GetButtonDown("Weapon 1"))
 			SetActiveWeapon(0);
 		if (Input.GetButtonDown("Weapon 2"))
 			SetActiveWeapon(1);
@@ -48,7 +53,7 @@ public class WeaponSystem : MonoBehaviour
 		if (Input.GetButtonDown("Weapon 8"))
 			SetActiveWeapon(7);
 		if (Input.GetButtonDown("Weapon 9"))
-			SetActiveWeapon(8);
+			SetActiveWeapon(8);*/
 
 		// Allow the user to scroll through the weapons
 		if (Input.GetAxis("Mouse ScrollWheel") > 0)
@@ -61,6 +66,47 @@ public class WeaponSystem : MonoBehaviour
 
         // Update the ammo UI
         ammoUI.UpdateAmmoUI();
+	}
+
+	//activate weapon based on int passed
+	public void activateWeapon(int activeNum){
+		if(activeNum > 4){
+			//do nothing
+		}
+		else if(activeNum == 4){
+			railGunActive4 = true;
+		}
+		else if(activeNum == 3){
+			m4Active3 = true;
+		}
+		else if(activeNum == 2){
+			shotGunActive2 = true;
+		}
+		else if(activeNum == 1){
+			beamActive1 = true;
+		}
+	}
+
+	public bool isActive(int num){
+		if(num > 4){
+			return false;
+		}
+		else if(num == 4){
+			return railGunActive4;
+		}
+		else if(num == 3){
+			return m4Active3;
+		}
+		else if(num == 2){
+			return shotGunActive2;
+		}
+		else if(num == 1){
+			return beamActive1;
+		}
+		else if(num == 0){
+			return pistol0;
+		}
+		return false;
 	}
 
 	void OnGUI()
@@ -82,6 +128,10 @@ public class WeaponSystem : MonoBehaviour
 		SendMessageUpwards("OnEasyWeaponsSwitch", SendMessageOptions.DontRequireReceiver);
 
 		// Make sure the weaponIndex references the correct weapon
+		if(index == 4 && !isActive(4)){
+		weaponIndex = 0;
+		return;
+		}
 		weaponIndex = index;
 
 		// Make sure beam game objects aren't left over after weapon switching
@@ -105,17 +155,27 @@ public class WeaponSystem : MonoBehaviour
 
 	public void NextWeapon()
 	{
-		weaponIndex++;
+		do{
+			weaponIndex++;
+		}
+		while(isActive(weaponIndex) != true && !(weaponIndex > weapons.Length) && !(weaponIndex <= -1));
+		//weaponIndex++;
 		if (weaponIndex > weapons.Length - 1)
 			weaponIndex = 0;
 		SetActiveWeapon(weaponIndex);
+		
 	}
 
 	public void PreviousWeapon()
 	{
-		weaponIndex--;
+		do{
+			weaponIndex--;
+			}
+		while(isActive(weaponIndex) != true && !(weaponIndex > weapons.Length - 1) && !(weaponIndex - 1 < 0));
+		//weaponIndex--;
 		if (weaponIndex < 0)
 			weaponIndex = weapons.Length - 1;
+		
 		SetActiveWeapon(weaponIndex);
 	}
 }

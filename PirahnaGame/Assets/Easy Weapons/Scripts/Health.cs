@@ -48,6 +48,10 @@ public class Health : MonoBehaviour
 		}
     }
 
+	void Update(){
+		 healthbar.maxValue = maxHealth;
+            healthbar.value = currentHealth;
+	}
 	public void ChangeHealth(float amount)
 	{
 		// Change the health by the amount specified in the amount variable

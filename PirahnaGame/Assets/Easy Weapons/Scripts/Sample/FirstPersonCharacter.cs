@@ -5,7 +5,8 @@ public class FirstPersonCharacter : MonoBehaviour
 {
 	[SerializeField] private float runSpeed = 8f;                                       // The speed at which we want the character to move
 	[SerializeField] private float strafeSpeed = 4f;                                    // The speed at which we want the character to be able to strafe
-	[SerializeField] private float jumpPower = 5f;                                      // The power behind the characters jump. increase for higher jumps
+	[SerializeField] private float jumpPower = 5f;
+	public int money;                                      // The power behind the characters jump. increase for higher jumps
 	
 	[SerializeField] private AdvancedSettings advanced = new AdvancedSettings();        // The container for the advanced settings ( done this way so that the advanced setting are exposed under a foldout
 	[SerializeField] private bool lockCursor = true;
@@ -41,6 +42,15 @@ public class FirstPersonCharacter : MonoBehaviour
 		{
 			Cursor.lockState = CursorLockMode.None;
 			Cursor.visible = true;
+		}
+	}
+
+	public void updateMoney(int amount){
+		if(amount >= 0){
+			money = money + amount;
+		}
+		else if ((money + amount) < 0){
+			money = 0;
 		}
 	}
 
