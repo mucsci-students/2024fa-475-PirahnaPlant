@@ -37,16 +37,25 @@ public class Health : MonoBehaviour
 	{
 		// Initialize the currentHealth variable to the value specified by the user in startingHealth
 		currentHealth = maxHealth;
-		healthbar.maxValue = maxHealth;
-		healthbar.value = currentHealth;
-		animScript = GetComponent<EnemyAnimations>();
+		if (GetComponent<Slider>() != null)
+		{
+            healthbar.maxValue = maxHealth;
+            healthbar.value = currentHealth;
+        }
+		if (GetComponent<Animator>() != null)
+		{
+			animScript = GetComponent<EnemyAnimations>();
+		}
     }
 
 	public void ChangeHealth(float amount)
 	{
 		// Change the health by the amount specified in the amount variable
 		currentHealth += amount;
-		healthbar.value = currentHealth;
+        if (healthbar != null)
+        {
+            healthbar.value = currentHealth;
+        }
 		// If the health runs out, then Die.
 		if (currentHealth <= 0 && !dead && canDie)
 			Die();
@@ -68,7 +77,6 @@ public class Health : MonoBehaviour
 
 		if (isPlayer && deathCam != null)
 			deathCam.SetActive(true);
-
 		if (isEnemy)
 		{
 			animScript.DeathAnim();

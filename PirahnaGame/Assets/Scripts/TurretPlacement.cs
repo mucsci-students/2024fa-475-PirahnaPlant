@@ -34,14 +34,14 @@ public class TurretPlacement : MonoBehaviour
     // Currently tied to ints num buttons, will change to UI butttons once implemented
     private void CheckHotKey()
     {
-        for (int i = 0; i < turrets.Length; i++) {
+        for (int i = 0; i < turrets.Length / 2; i++) {
             if (Input.GetKeyDown(KeyCode.Alpha0 + 1 + i))
             {
                 if (SelectCurrentTurret(i))
                 {
                     Destroy(currentTurret);
                     index = -1;
-                } else
+                }else
                 {
                     if (currentTurret != null)
                     {
@@ -81,7 +81,7 @@ public class TurretPlacement : MonoBehaviour
 
     private void Place()
     {
-        if (Input.GetKey(KeyCode.T))
+        if (Input.GetKey(KeyCode.Tab))
         {
             if (index == 0)
             {

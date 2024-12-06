@@ -22,5 +22,11 @@ public class EnemyAnimations : MonoBehaviour
     public void DeathAnim()
     {
         anim.SetFloat("Health", 0);
+        Wait(3);
+    }
+
+    private IEnumerator Wait(int seconds)
+    {
+        yield return new WaitForSeconds(seconds);
     }
 }
