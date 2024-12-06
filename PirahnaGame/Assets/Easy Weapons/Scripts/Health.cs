@@ -13,10 +13,9 @@ using UnityEngine.UI;
 public class Health : MonoBehaviour
 {
 	public bool canDie = true;					// Whether or not this health can die
-	
 	public float startingHealth = 100.0f;		// The amount of health to start with
 	public float maxHealth = 100.0f;			// The maximum amount of health
-	private float currentHealth;				// The current ammount of health
+	public float currentHealth;				// The current ammount of health
 
 	public bool replaceWhenDead = false;		// Whether or not a dead replacement should be instantiated.  (Useful for breaking/shattering/exploding effects)
 	public GameObject deadReplacement;			// The prefab to instantiate when this GameObject dies
@@ -34,7 +33,7 @@ public class Health : MonoBehaviour
 	void Start()
 	{
 		// Initialize the currentHealth variable to the value specified by the user in startingHealth
-		currentHealth = startingHealth;
+		currentHealth = maxHealth;
     }
 
 	public void ChangeHealth(float amount)
@@ -55,7 +54,6 @@ public class Health : MonoBehaviour
 	{
 		// This GameObject is officially dead.  This is used to make sure the Die() function isn't called again
 		dead = true;
-
 		// Make death effects
 		if (replaceWhenDead)
 			Instantiate(deadReplacement, transform.position, transform.rotation);
