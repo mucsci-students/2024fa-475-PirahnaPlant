@@ -8,6 +8,7 @@ public class MoneyScript : MonoBehaviour
     //public GameObject player;
     
     void Start(){
+        totalCoins = 0;
     gameObject.GetComponent<FirstPersonCharacter>().updateMoney(totalCoins);
     }
 

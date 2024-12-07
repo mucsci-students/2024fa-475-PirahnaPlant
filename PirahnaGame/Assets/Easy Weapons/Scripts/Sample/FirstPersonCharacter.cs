@@ -28,6 +28,7 @@ public class FirstPersonCharacter : MonoBehaviour
 	
 	void Awake ()
 	{
+		money = 0;
 		// Set up a reference to the capsule collider.
 		capsule = GetComponent<Collider>() as CapsuleCollider;
 		grounded = true;

@@ -12,6 +12,8 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
+	public FirstPersonCharacter player;
+	public int mobMoneyValue = 5;
 	public bool canDie = true;					// Whether or not this health can die
 	public float startingHealth = 100.0f;		// The amount of health to start with
 	public float maxHealth = 100.0f;			// The maximum amount of health
@@ -22,6 +24,7 @@ public class Health : MonoBehaviour
 	public bool makeExplosion = false;			// Whether or not an explosion prefab should be instantiated
 	public GameObject explosion;				// The explosion prefab to be instantiated
 
+	public bool isTurret = false;
 	public bool isPlayer = false;               // Whether or not this health is the player
 	public bool isEnemy = false;				// Whether or not this health is an enemy
 	public GameObject deathCam;					// The camera to activate when the player dies
@@ -78,6 +81,9 @@ public class Health : MonoBehaviour
 			Instantiate(deadReplacement, transform.position, transform.rotation);
 		if (makeExplosion)
 			Instantiate(explosion, transform.position, transform.rotation);
+		if(!(isPlayer) && !(isTurret)){
+			player.GetComponent<MoneyScript>().addToBalance(mobMoneyValue);
+		}
 
 		if (isPlayer && deathCam != null)
 			deathCam.SetActive(true);
