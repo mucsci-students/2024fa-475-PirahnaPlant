@@ -12,8 +12,11 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
-	public FirstPersonCharacter player;
-	public int mobMoneyValue = 5;
+	//public FirstPersonCharacter player;
+	public GameObject moneyManager;
+	public RespawnScript respawnScript;
+	public int mobMoneyValue1 = 5;
+	public int mobMoneyValue2 = 0;
 	public bool canDie = true;					// Whether or not this health can die
 	public float startingHealth = 100.0f;		// The amount of health to start with
 	public float maxHealth = 100.0f;			// The maximum amount of health
@@ -24,6 +27,7 @@ public class Health : MonoBehaviour
 	public bool makeExplosion = false;			// Whether or not an explosion prefab should be instantiated
 	public GameObject explosion;				// The explosion prefab to be instantiated
 
+	public bool isCube = false;
 	public bool isTurret = false;
 	public bool isPlayer = false;               // Whether or not this health is the player
 	public bool isEnemy = false;				// Whether or not this health is an enemy
@@ -66,6 +70,15 @@ public class Health : MonoBehaviour
 		// If the health runs out, then Die.
 		if (currentHealth <= 0 && !dead && canDie)
 			Die();
+		
+		else if (currentHealth <= 0 && isPlayer){
+			if (respawnScript != null)
+        		{
+				currentHealth = maxHealth;
+            	respawnScript.RespawnPlayer();  // Respawn at the designated respawn point
+       			 }
+
+		}
 
 		// Make sure that the health never exceeds the maximum health
 		else if (currentHealth > maxHealth)
@@ -81,13 +94,20 @@ public class Health : MonoBehaviour
 			Instantiate(deadReplacement, transform.position, transform.rotation);
 		if (makeExplosion)
 			Instantiate(explosion, transform.position, transform.rotation);
-		if(!(isPlayer) && !(isTurret)){
-			player.GetComponent<MoneyScript>().addToBalance(mobMoneyValue);
+		if(isEnemy){
+			if (mobMoneyValue1 == 0)
+        {
+            MoneyScript.Instance.updateMoney(mobMoneyValue2);  // Update money for mobMoneyValue2
+        }
+        else if (mobMoneyValue2 == 0)
+        {
+            MoneyScript.Instance.updateMoney(mobMoneyValue1);  // Update money for mobMoneyValue1
+        }
 		}
 
 		if (isPlayer && deathCam != null)
 			deathCam.SetActive(true);
-		if (isEnemy)
+		if (isEnemy && !(isCube))
 		{
 			animScript.DeathAnim();
 		}

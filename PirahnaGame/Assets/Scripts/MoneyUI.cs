@@ -6,19 +6,19 @@ using TMPro;
 public class MoneyUI : MonoBehaviour
 {
     public TextMeshProUGUI moneyText;
-    public FirstPersonCharacter player;
+    public GameObject moneyManager;
 
     void Start()
     {
-        if (player.GetComponent<MoneyScript>().totalCoins >= 0){
-        moneyText.text = "$: " + player.GetComponent<MoneyScript>().totalCoins;
+        if (moneyManager.GetComponent<MoneyScript>().totalMoney >= 0){
+        moneyText.text = "$: " + moneyManager.GetComponent<MoneyScript>().totalMoney;
         }
         else {
             moneyText.text = "$: 0";
         }
         if (moneyText == null)
         {
-            Debug.LogError("No Ammo UI Text element assigned.");
+            Debug.LogError("No Money UI Text element assigned.");
         }
     }
     void Update(){
@@ -26,10 +26,10 @@ public class MoneyUI : MonoBehaviour
     }
    public void UpdateMoneyUI()
     {
-        if (player != null)
+        if (moneyManager != null)
         {
-            if (player.GetComponent<MoneyScript>().totalCoins >= 0){
-        moneyText.text = "$: " + player.GetComponent<MoneyScript>().totalCoins;
+            if (moneyManager.GetComponent<MoneyScript>().totalMoney >= 0){
+        moneyText.text = "$: " + moneyManager.GetComponent<MoneyScript>().totalMoney;
         }
         else {
             moneyText.text = "$: 0";
