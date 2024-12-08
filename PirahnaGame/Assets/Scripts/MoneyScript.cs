@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class MoneyScript : MonoBehaviour
 {
-    public static MoneyScript Instance;  // Singleton instance
+    public static MoneyScript Instance;  
     public int totalMoney = 0;
 
     void Awake()
     {
-        // Ensure that there is only one instance of MoneyScript
+        
         if (Instance == null)
         {
-            Instance = this;  // Set the instance to this script
-            DontDestroyOnLoad(gameObject);  // Keep this object alive across scenes if needed
+            Instance = this;  
+            DontDestroyOnLoad(gameObject);  
         }
         else
         {
-            Destroy(gameObject);  // Destroy duplicate MoneyScript instances
+            Destroy(gameObject);  
         }
     }
 
