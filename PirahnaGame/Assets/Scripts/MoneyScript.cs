@@ -28,13 +28,14 @@ public class MoneyScript : MonoBehaviour
 
     public void updateMoney(int amount)
     {
-        if(amount >= 0)
-        {
-            totalMoney += amount;
-        }
-        else if ((totalMoney + amount) < 0)
+        
+        if ((totalMoney + amount) < 0)
         {
             totalMoney = 0;
+        }
+        else
+        {
+            totalMoney += amount;
         }
     }
 

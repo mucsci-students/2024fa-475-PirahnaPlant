@@ -6,6 +6,7 @@ public class RespawnScript : MonoBehaviour
 {
     public GameObject player;          // The player GameObject to respawn
     public Transform respawnPoint;     // The position where the player should respawn
+    private int moneyLoss = 30;
 
     void Start()
     {
@@ -19,12 +20,13 @@ public class RespawnScript : MonoBehaviour
         }
     }
 
-    // Call this method when the player needs to respawn (e.g., upon death)
+    // Call this method when the player needs to respawn
     public void RespawnPlayer()
     {
         if (player != null && respawnPoint != null)
         {
             // Reset the player's position to the respawn point
+            MoneyScript.Instance.updateMoney(-moneyLoss);  
             player.transform.position = respawnPoint.position;
             player.GetComponent<Health>().currentHealth = player.GetComponent<Health>().maxHealth;
         }
