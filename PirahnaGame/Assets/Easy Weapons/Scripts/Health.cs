@@ -39,6 +39,8 @@ public class Health : MonoBehaviour
 
 	private EnemyAnimations animScript;
 
+	private Animator anim;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -52,12 +54,13 @@ public class Health : MonoBehaviour
 		if (GetComponent<Animator>() != null)
 		{
 			animScript = GetComponent<EnemyAnimations>();
+			anim = GetComponent<Animator>();
 		}
     }
 
 	void Update(){
 		 healthbar.maxValue = maxHealth;
-            healthbar.value = currentHealth;
+			healthbar.value = currentHealth;
 	}
 	public void ChangeHealth(float amount)
 	{
@@ -109,10 +112,18 @@ public class Health : MonoBehaviour
 			deathCam.SetActive(true);
 		if (isEnemy && !(isCube))
 		{
-			animScript.DeathAnim();
-		}
-
-		// Remove this GameObject from the scene
-		Destroy(gameObject);
+			anim.SetBool("Dead", true);
+			Invoke("DestroyObject", 0.5f);
+		} else
+		{
+            // Remove this GameObject from the scene
+            Destroy(gameObject);
+        }
 	}
+
+	private void DestroyObject()
+	{
+        // Remove this GameObject from the scene
+        Destroy(gameObject);
+    }
 }
