@@ -6,6 +6,7 @@ public class MoneyScript : MonoBehaviour
 {
     public static MoneyScript Instance;  
     public int totalMoney = 0;
+    public GameObject player;
 
     void Awake()
     {
@@ -43,6 +44,7 @@ public class MoneyScript : MonoBehaviour
     {
         if (totalMoney < cost)
         {
+            StartCoroutine(player.GetComponentInChildren<MoneyUI>().SetMoneyTextRedForSeconds(0.25f));
             return false;
         }
         return true;
