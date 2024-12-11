@@ -14,9 +14,12 @@ public class AmmoUI : MonoBehaviour
         {
             Debug.LogError("No weapon assigned to AmmoUI.");
         }
-
+        if (!(currentWeapon.isBeam())){
         ammoText.text = "Ammo: " + currentWeapon.ammoCapacity + " / " + currentWeapon.ammoCapacity;
-        
+        }
+        else {
+            ammoText.text = " ";
+        }
         if (ammoText == null)
         {
             Debug.LogError("No Ammo UI Text element assigned.");
@@ -27,7 +30,12 @@ public class AmmoUI : MonoBehaviour
     {
         if (currentWeapon != null)
         {
+            if (!(currentWeapon.isBeam())){
             ammoText.text = "Ammo: " + currentWeapon.currentAmmo + " / " + currentWeapon.ammoCapacity;
+            }
+            else {
+            ammoText.text = " ";
+            }
         }
     }
 }

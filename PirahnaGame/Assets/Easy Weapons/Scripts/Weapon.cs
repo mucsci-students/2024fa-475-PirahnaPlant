@@ -120,7 +120,7 @@ public class Weapon : MonoBehaviour
 	private float beamHeat = 0.0f;						// Timer to keep track of beam warmup and cooldown
 	private bool coolingDown = false;					// Whether or not the beam weapon is currently cooling off.  This is used to make sure the weapon isn't fired when it's too close to the maximum heat level
 	private GameObject beamGO;							// The reference to the instantiated beam GameObject
-	private bool beaming = false;						// Whether or not the weapon is currently firing a beam - used to make sure StopBeam() is called after the beam is no longer being fired
+	public bool beaming = false;						// Whether or not the weapon is currently firing a beam - used to make sure StopBeam() is called after the beam is no longer being fired
 
 	// Power
 	
@@ -317,12 +317,16 @@ public class Weapon : MonoBehaviour
 		// Make sure StopBeam() is called when the weapon is no longer firing a beam (calling the Beam() method)
 		if (type == WeaponType.Beam)
 		{
+
 			if (!beaming)
 				StopBeam();
 			beaming = false;	// The beaming variable is set to true every frame that the Beam() method is called
 		}
 	}
 
+	public bool isBeam(){
+		return (type == WeaponType.Beam);
+	}
 	// Checks for user input to use the weapons - only if this weapon is player-controlled
 	void CheckForUserInput()
 	{
@@ -626,7 +630,7 @@ public class Weapon : MonoBehaviour
 				
 				if (shooterAIEnabled)
 				{
-					hit.transform.SendMessageUpwards("Damage", damage / 100, SendMessageOptions.DontRequireReceiver);
+					hit.transform.SendMessageUpwards("Damage", -damage, SendMessageOptions.DontRequireReceiver);
 				}
 
 				if (bloodyMessEnabled)

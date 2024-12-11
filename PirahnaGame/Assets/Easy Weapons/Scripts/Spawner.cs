@@ -18,10 +18,22 @@ public class Spawner : MonoBehaviour
 
 	private float spawnTimer = 0.0f;
 
-	// Use this for initialization
-	void Start()
+    // Destroy Spawner when all enemies have been spawned
+    public int maxSpawn = 10;
+    private int spawnCounter = 0;
+
+    // Track enemies Spawned
+    public int numEnemies;
+
+	public GameObject roundManager;
+	private RoundManager script;
+
+    // Use this for initialization
+    void Start()
 	{
-		if (spawnOnStart)
+        roundManager = GameObject.Find("RoundManager");
+        script = roundManager.GetComponent<RoundManager>();
+        if (spawnOnStart)
 		{
 			Spawn();
 		}
@@ -34,17 +46,23 @@ public class Spawner : MonoBehaviour
 		spawnTimer += Time.deltaTime;
 
 		// Spawn a prefab if the timer has reached spawnFrequency
-		if (spawnTimer >= spawnFrequency)
+		if (spawnTimer >= spawnFrequency && spawnCounter <= maxSpawn)
 		{
 			// First reset the spawn timer to 0
 			spawnTimer = 0.0f;
 			Spawn();
 		}
 
+		/*
 		// Move and turn so that boxes don't keep spawning in the same spots
 		transform.Translate(0, 0, moveAmount);
 		transform.Rotate(0, turnAmount, 0);
-	}
+		*/
+        if (spawnCounter > maxSpawn && numEnemies == 0)
+        {
+            Destroy(gameObject);
+        }
+    }
 
 	void Spawn()
 	{
@@ -52,8 +70,26 @@ public class Spawner : MonoBehaviour
 		if (prefabToSpawn != null)
 		{
 			// Instantiate the prefab
-			Instantiate(prefabToSpawn, transform.position, Quaternion.identity);
+			var enemy = Instantiate(prefabToSpawn, transform.position, Quaternion.identity);
+            enemy.transform.SetParent(this.transform);
+			/*
+            // Move and turn so that boxes don't keep spawning in the same spots
+            transform.Translate(0, 0, moveAmount);
+            transform.Rotate(0, turnAmount, 0);
+			*/
+            spawnCounter++;
+			numEnemies++;
 		}
 	}
+
+    public void EnemyKilled()
+    {
+        numEnemies--;
+    }
+
+    private void OnDestroy()
+    {
+		script.SpawnerDestroyed();
+    }
 }
 

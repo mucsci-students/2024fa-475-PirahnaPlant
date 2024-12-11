@@ -5,16 +5,21 @@ using UnityEngine.UI;
 
 public class UpdateHealthBar : MonoBehaviour
 {
-    [SerializeField] private Slider slider;
-    public Transform cam;
+    [SerializeField] private Canvas canvas;
+    GameObject character;
+    Transform cam;
 
-    public void UpdateHealthValue(float curHealth, float maxHealth)
+    // Find charcater's transform to point health bars at
+    private void Start()
     {
-        slider.value = curHealth / maxHealth;
+        character = GameObject.Find("Regular_Character");
+        cam = character.transform;
     }
+
     // Update is called once per frame
-    void lateUpdate()
+    void Update()
     {
-        transform.LookAt(cam);
+        Vector3 targetPosition = cam.transform.position;
+        canvas.transform.LookAt(targetPosition, Vector3.up);
     }
 }

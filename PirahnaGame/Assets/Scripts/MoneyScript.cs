@@ -4,33 +4,62 @@ using UnityEngine;
 
 public class MoneyScript : MonoBehaviour
 {
-    private int totalCoins = 0;
-    
- void addToBalance(){
-    if(totalCoins == 0){
+    public static MoneyScript Instance;  
+    public int totalMoney = 0;
+    public GameObject player;
 
+    void Awake()
+    {
+        
+        if (Instance == null)
+        {
+            Instance = this;  
+            DontDestroyOnLoad(gameObject);  
+        }
+        else
+        {
+            Destroy(gameObject);  
+        }
     }
-    if(totalCoins == 0) {
 
+    public void addToBalance(int update)
+    {
+        updateMoney(update);
     }
-    if(totalCoins == 0){
 
-    } 
-    if(totalCoins == 0){
-
+    public void updateMoney(int amount)
+    {
+        
+        if ((totalMoney + amount) < 0)
+        {
+            totalMoney = 0;
+        }
+        else
+        {
+            totalMoney += amount;
+        }
     }
-    if(totalCoins == 0){
 
+    public bool canBuy(int cost)
+    {
+        if (totalMoney < cost)
+        {
+            StartCoroutine(player.GetComponentInChildren<MoneyUI>().SetMoneyTextRedForSeconds(0.25f));
+            return false;
+        }
+        return true;
     }
-    
-}
 
-void subBalance(){
+    public void buyItem(int cost)
+    {
+        if (canBuy(cost))
+        {
+            updateMoney(-cost);
+        }
+    }
 
-}
-
-public int getBalance(){
-    return totalCoins;
-}
-
+    public int getBalance()
+    {
+        return totalMoney;
+    }
 }
