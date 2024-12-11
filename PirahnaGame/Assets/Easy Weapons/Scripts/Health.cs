@@ -41,6 +41,12 @@ public class Health : MonoBehaviour
 
 	private Animator anim;
 
+	// Used to access the parent spawner's script of the enemy
+	private BatchSpawn parentBatchSpawner;
+	private RandomBatchSpawner parentRandBatchSpawner;
+	private RandomSpawner parentRandSpawner;
+	private Spawner parentSpawner;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -56,6 +62,24 @@ public class Health : MonoBehaviour
 			animScript = GetComponent<EnemyAnimations>();
 			anim = GetComponent<Animator>();
 		}
+		// Get Enemies parent spawner's script
+        if (transform.parent.GetComponent<BatchSpawn>() != null)
+        {
+            parentBatchSpawner = transform.parent.GetComponent<BatchSpawn>();
+        }
+        if (transform.parent.GetComponent<RandomBatchSpawner>() != null)
+		{
+			parentRandBatchSpawner = transform.parent.GetComponent<RandomBatchSpawner>();
+		}
+		if (transform.parent.GetComponent<RandomSpawner>() != null)
+		{
+			parentRandSpawner = transform.parent.GetComponent<RandomSpawner>();
+		}
+        if (transform.parent.GetComponent<Spawner>() != null)
+		{
+            parentSpawner = transform.parent.GetComponent<Spawner>();
+        }
+
     }
 
 	void Update(){
@@ -131,4 +155,23 @@ public class Health : MonoBehaviour
 	{
 		return currentHealth;
 	}
+
+	// When enemy is destroyed call EnemyKilled in the parent spawner
+    private void OnDestroy()
+    {
+		
+		if (parentSpawner != null)
+		{
+			parentSpawner.EnemyKilled();
+		} else if (parentRandBatchSpawner != null)
+		{
+			parentRandBatchSpawner.EnemyKilled();
+		} else if (parentBatchSpawner != null)
+		{
+            parentBatchSpawner.EnemyKilled();
+        } else if(parentRandSpawner != null)
+		{
+			parentRandSpawner.EnemyKilled();
+		}
+    }
 }
