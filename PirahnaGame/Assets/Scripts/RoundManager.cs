@@ -8,7 +8,8 @@ public class RoundManager : MonoBehaviour
 
     public int roundNumber = 0;
     public int maxRounds = 10;
-
+    public float moveAmount = 5.0f;                 // The amount to move
+    public float turnAmount = 5.0f;                 // The amount to turn
     public float restTime = 10f;
     public float timer = 0f;
     // List of active enemies
@@ -40,17 +41,20 @@ public class RoundManager : MonoBehaviour
             }
             else
             {
+                // Move round manager to randomize where spawners are placed
                 timer += Time.deltaTime;
+                transform.Translate(0, 0, moveAmount);
+                transform.Rotate(0, turnAmount, 0);
             }
         }
     }
     void RoundStart()
     {
         roundNumber++;
-        
         int maxSpawners = roundNumber;
         // Instantiate Spawners for round
-        for (int i = 0; i < maxSpawners; i++)
+        // Move and turn so that boxes don't keep spawning in the same spots
+        for (int i = 0; i <= maxSpawners; i++)
         {
             SpawnSpawners();
         }
@@ -59,8 +63,13 @@ public class RoundManager : MonoBehaviour
 
     void SpawnSpawners()
     {
-        int rand = Random.Range(0, 18); // Change range later to specialize rounds later
-        var spawner = Instantiate(availableSpawners[19], transform);
+        int rand = Random.Range(0, 17); // Change range later to specialize rounds later
+        var spawner = Instantiate(availableSpawners[rand], transform);
+        // Randomize placement of spawner's x and z values
+        float x = Random.Range(-50, 50);
+        float z = Random.Range(-50, 50);
+        Vector3 pos = new Vector3(x, 5, z);
+        spawner.transform.position = pos;
         spawner.transform.SetParent(this.transform);
         ++numSpawners;
     }
