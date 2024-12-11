@@ -12,6 +12,17 @@ public class EnemyAI : MonoBehaviour
     private float attackTimer = 0f;
     public bool suicidal;
 
+    private Animator anim;
+
+
+    private void Start()
+    {
+        if (GetComponent<Animator>() != null)
+        {
+            anim = GetComponent<Animator>();
+            anim.SetBool("Moving", true);
+        }
+    }
 
     void Update()
     {
@@ -93,6 +104,8 @@ public class EnemyAI : MonoBehaviour
         if (collision.gameObject.CompareTag("Turret") || collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Core"))
         {
             Health healthScript = collision.gameObject.GetComponent<Health>();
+            anim.SetBool("Moving", false);
+            anim.SetBool("Attacking", true);
             if (suicidal)
             {
                 Health script = gameObject.GetComponent<Health>();
@@ -114,5 +127,11 @@ public class EnemyAI : MonoBehaviour
 
             //Destroy(gameObject);
         }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        anim.SetBool("Attacking", false);
+        anim.SetBool("Moving", true);
     }
 }
