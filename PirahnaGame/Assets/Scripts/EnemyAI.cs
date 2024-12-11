@@ -8,6 +8,10 @@ public class EnemyAI : MonoBehaviour
     public float obstacleAvoidanceRadius = 1.5f;
     public float damage = 10f;
     private Transform target;
+    private float attackCooldown = 1.5f;
+    private float attackTimer = 0f;
+    public bool suicidal;
+
 
     void Update()
     {
@@ -84,14 +88,28 @@ public class EnemyAI : MonoBehaviour
         return closest;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Turret") || collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Core"))
         {
             Health healthScript = collision.gameObject.GetComponent<Health>();
+            if (suicidal)
+            {
+                Health script = gameObject.GetComponent<Health>();
+                float health = script.getCurrentHealth();
+                script.ChangeHealth(-health);
+            }
             if (healthScript != null)
             {
-                healthScript.ChangeHealth(-damage);
+                if (attackTimer > 0f)
+                {
+                    attackTimer -= Time.deltaTime;
+                } else
+                {
+                    healthScript.ChangeHealth(-damage);
+                    attackTimer = attackCooldown;
+                }
+                  
             }
 
             //Destroy(gameObject);

@@ -126,4 +126,9 @@ public class Health : MonoBehaviour
         // Remove this GameObject from the scene
         Destroy(gameObject);
     }
+
+	public float getCurrentHealth()
+	{
+		return currentHealth;
+	}
 }
