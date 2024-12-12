@@ -16,6 +16,8 @@ public class RoundManager : MonoBehaviour
     // List of active enemies
     public int numSpawners;
 
+    public GameObject core;
+
     public GameObject[] availableSpawners;
 
     // Start is called before the first frame update
@@ -32,11 +34,18 @@ public class RoundManager : MonoBehaviour
         {
             // Win (Add Winning Screen)
         }
+<<<<<<< HEAD
         if(roundNumber == 5 || roundNumber == 10){
             isboss = true;
         }
         else {
             isboss = false;
+=======
+        if (core == null)
+        {
+            // Lose Game if core is destroyed
+            // Switch to losing screen
+>>>>>>> a7c1bf9da7315ac04d53627bf2d9038ce8efeb19
         }
         // If all enemies are dead start next round after certain amount of time
         if (numSpawners == 0)
@@ -57,11 +66,18 @@ public class RoundManager : MonoBehaviour
     }
     void RoundStart()
     {
+        int maxSpawners;
         roundNumber++;
-        int maxSpawners = (3 * roundNumber) - roundNumber;
+        if (roundNumber == 1)
+        {
+            maxSpawners = 3;
+        } else
+        {
+            maxSpawners = roundNumber * 2 + 3;
+        }
         // Instantiate Spawners for round
         // Move and turn so that boxes don't keep spawning in the same spots
-        for (int i = 0; i <= maxSpawners; i++)
+        for (int i = 0; i < maxSpawners; i++)
         {
             SpawnSpawners();
         }
@@ -70,25 +86,36 @@ public class RoundManager : MonoBehaviour
 
     void SpawnSpawners()
     {
-        int rand = Random.Range(0, 16); // Change range later to specialize rounds later
-        if(isboss){
-            rand = 17;
-        }
-        var spawner = Instantiate(availableSpawners[rand], transform);
         
+        int spawnerIndex;
+        if (roundNumber == 1)
+        {
+            spawnerIndex = Random.Range(0, 2);
+        } else if (roundNumber <= 3)
+        {
+            spawnerIndex = Random.Range(0, 6);
+        } else if (roundNumber <= 5)
+        {
+            spawnerIndex = Random.Range(0, 12);
+        }
+        else if(isboss){
+            spawnerIndex = 18;
+        }
+        else {
+            spawnerIndex = Random.Range(0, 17);
+        }
+        var spawner = Instantiate(availableSpawners[spawnerIndex], transform);
         // Randomize placement of spawner's x and z values
-        float x = Random.Range(100, 125);
-        float z = Random.Range(100, 125);
-        float p = Random.Range(0,1);
-        float s = Random.Range(0,1);
+        float x = Random.Range(100, 150);
+        float z = Random.Range(100, 150);
+        float p = Random.Range(0,2);
+        float s = Random.Range(0,2);
         if(p == 1){
             x = x * -1f;
         }
         if(s == 1){
-            s = s * -1f;
+            z = z * -1f;
         }
-        //Vector3 parentPosition = this.transform.parent.position;
-        //Vector3 pos = new Vector3((parentPosition.x + x), 100,( parentPosition.z + z));
     
         spawner.transform.Translate(x, 1, z);
         spawner.transform.SetParent(this.transform);

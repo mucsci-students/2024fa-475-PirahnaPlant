@@ -30,7 +30,8 @@ public class Health : MonoBehaviour
 	public bool isCube = false;
 	public bool isTurret = false;
 	public bool isPlayer = false;               // Whether or not this health is the player
-	public bool isEnemy = false;				// Whether or not this health is an enemy
+	public bool isEnemy = false;                // Whether or not this health is an enemy
+	public bool isCore = false;					// Whether or not this health is the core
 	public GameObject deathCam;					// The camera to activate when the player dies
 
 	private bool diedFalling = false;
@@ -97,28 +98,40 @@ public class Health : MonoBehaviour
 	}
 	public void ChangeHealth(float amount)
 	{
-		// Change the health by the amount specified in the amount variable
-		currentHealth += amount;
-        if (healthbar != null)
-        {
-            healthbar.value = currentHealth;
-        }
-		// If the health runs out, then Die.
-		if (currentHealth <= 0 && !dead && canDie)
-			Die();
-		
-		else if (currentHealth <= 0 && isPlayer){
-			if (respawnScript != null)
-        		{
-				currentHealth = maxHealth;
-            	respawnScript.RespawnPlayer();  // Respawn at the designated respawn point
-       			 }
-
+		if (isCore)
+		{
+			// Do Nothing
 		}
+		else if (isTurret)
+		{
+			// Do Nothing
+		}
+		else
+		{
+			// Change the health by the amount specified in the amount variable
+			currentHealth += amount;
+			if (healthbar != null)
+			{
+				healthbar.value = currentHealth;
+			}
+			// If the health runs out, then Die.
+			if (currentHealth <= 0 && !dead && canDie)
+				Die();
 
-		// Make sure that the health never exceeds the maximum health
-		else if (currentHealth > maxHealth)
-			currentHealth = maxHealth;
+			else if (currentHealth <= 0 && isPlayer)
+			{
+				if (respawnScript != null)
+				{
+					currentHealth = maxHealth;
+					respawnScript.RespawnPlayer();  // Respawn at the designated respawn point
+				}
+
+			}
+
+			// Make sure that the health never exceeds the maximum health
+			else if (currentHealth > maxHealth)
+				currentHealth = maxHealth;
+		}
 	}
 
 	public void Die()
@@ -182,5 +195,44 @@ public class Health : MonoBehaviour
 		{
 			parentRandSpawner.EnemyKilled();
 		}
+    }
+
+	public void CoreDamage(float damage)
+	{
+		// Change the health by the amount specified in the amount variable
+		currentHealth += damage;
+		if (healthbar != null)
+		{
+			healthbar.value = currentHealth;
+		}
+		// If the health runs out, then Die.
+		if (currentHealth <= 0 && !dead && canDie) { 
+			Die();
+        }
+		// Make sure that the health never exceeds the maximum health
+		if (currentHealth > maxHealth)
+		{
+			currentHealth = maxHealth;
+		}
+    }
+
+	public void TurretDamage(float amount)
+	{
+        // Change the health by the amount specified in the amount variable
+        currentHealth += amount;
+        if (healthbar != null)
+        {
+            healthbar.value = currentHealth;
+        }
+        // If the health runs out, then Die.
+        if (currentHealth <= 0 && !dead && canDie)
+        {
+            Die();
+        }
+        // Make sure that the health never exceeds the maximum health
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
     }
 }
