@@ -19,7 +19,7 @@ public class RoundManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   numSpawners = 0;
         timer = 0f;
         RoundStart();
     }
@@ -43,15 +43,15 @@ public class RoundManager : MonoBehaviour
             {
                 // Move round manager to randomize where spawners are placed
                 timer += Time.deltaTime;
-                transform.Translate(0, 0, moveAmount);
-                transform.Rotate(0, turnAmount, 0);
+                transform.Translate(0, 0, 0);
+                transform.Rotate(0, 0, 0);
             }
         }
     }
     void RoundStart()
     {
         roundNumber++;
-        int maxSpawners = roundNumber;
+        int maxSpawners = (3 * roundNumber) - roundNumber;
         // Instantiate Spawners for round
         // Move and turn so that boxes don't keep spawning in the same spots
         for (int i = 0; i <= maxSpawners; i++)
@@ -66,10 +66,20 @@ public class RoundManager : MonoBehaviour
         int rand = Random.Range(0, 17); // Change range later to specialize rounds later
         var spawner = Instantiate(availableSpawners[rand], transform);
         // Randomize placement of spawner's x and z values
-        float x = Random.Range(-50, 0);
-        float z = Random.Range(-50, 0);
-        Vector3 pos = new Vector3(x, 101, z);
-        spawner.transform.position = pos;
+        float x = Random.Range(100, 125);
+        float z = Random.Range(100, 125);
+        float p = Random.Range(0,1);
+        float s = Random.Range(0,1);
+        if(p == 1){
+            x = x * -1f;
+        }
+        if(s == 1){
+            s = s * -1f;
+        }
+        //Vector3 parentPosition = this.transform.parent.position;
+        //Vector3 pos = new Vector3((parentPosition.x + x), 100,( parentPosition.z + z));
+    
+        spawner.transform.Translate(x, 1, z);
         spawner.transform.SetParent(this.transform);
         ++numSpawners;
     }

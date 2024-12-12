@@ -33,6 +33,7 @@ public class Health : MonoBehaviour
 	public bool isEnemy = false;				// Whether or not this health is an enemy
 	public GameObject deathCam;					// The camera to activate when the player dies
 
+	private bool diedFalling = false;
 	private bool dead = false;                  // Used to make sure the Die() function isn't called twice
 
 	[SerializeField] Slider healthbar;
@@ -83,8 +84,16 @@ public class Health : MonoBehaviour
     }
 
 	void Update(){
-		 healthbar.maxValue = maxHealth;
-			healthbar.value = currentHealth;
+		if (GetComponent<Slider>() != null)
+		{
+            healthbar.maxValue = maxHealth;
+            healthbar.value = currentHealth;
+        }
+		if ((transform.position.y <= -10) && isEnemy)
+		{
+			diedFalling = true;
+			Die();
+		}
 	}
 	public void ChangeHealth(float amount)
 	{
@@ -121,7 +130,7 @@ public class Health : MonoBehaviour
 			Instantiate(deadReplacement, transform.position, transform.rotation);
 		if (makeExplosion)
 			Instantiate(explosion, transform.position, transform.rotation);
-		if(isEnemy){
+		if(isEnemy && !diedFalling){
 			if (mobMoneyValue1 == 0)
         {
             MoneyScript.Instance.updateMoney(mobMoneyValue2);  // Update money for mobMoneyValue2
