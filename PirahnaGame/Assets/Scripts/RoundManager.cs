@@ -34,18 +34,16 @@ public class RoundManager : MonoBehaviour
         {
             // Win (Add Winning Screen)
         }
-<<<<<<< HEAD
         if(roundNumber == 5 || roundNumber == 10){
             isboss = true;
         }
         else {
             isboss = false;
-=======
+        }
         if (core == null)
         {
             // Lose Game if core is destroyed
             // Switch to losing screen
->>>>>>> a7c1bf9da7315ac04d53627bf2d9038ce8efeb19
         }
         // If all enemies are dead start next round after certain amount of time
         if (numSpawners == 0)
