@@ -100,12 +100,33 @@ public class Health : MonoBehaviour
 	{
 		if (isCore)
 		{
-			// Do Nothing
-		}
+            if (amount > 0)
+            {
+                currentHealth += amount;
+                if (healthbar != null)
+                {
+                    healthbar.value = currentHealth;
+                }
+            }
+            else
+            {
+                // Do Nothing
+            }
+        }
 		else if (isTurret)
 		{
-			// Do Nothing
-		}
+			if (amount > 0)
+			{
+                currentHealth += amount;
+                if (healthbar != null)
+                {
+                    healthbar.value = currentHealth;
+                }
+            } else
+			{
+                // Do Nothing
+            }
+        }
 		else
 		{
 			// Change the health by the amount specified in the amount variable
@@ -126,13 +147,15 @@ public class Health : MonoBehaviour
 					respawnScript.RespawnPlayer();  // Respawn at the designated respawn point
 				}
 
-			}
-
-			// Make sure that the health never exceeds the maximum health
-			else if (currentHealth > maxHealth)
-				currentHealth = maxHealth;
+			}			
 		}
-	}
+        // Make sure that the health never exceeds the maximum health
+        if (currentHealth > maxHealth)
+		{
+            currentHealth = maxHealth;
+        }
+            
+    }
 
 	public void Die()
 	{
