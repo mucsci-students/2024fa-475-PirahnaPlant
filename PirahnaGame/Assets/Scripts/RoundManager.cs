@@ -12,6 +12,7 @@ public class RoundManager : MonoBehaviour
     public float turnAmount = 5.0f;                 // The amount to turn
     public float restTime = 10f;
     public float timer = 0f;
+    public bool isboss = false;
     // List of active enemies
     public int numSpawners;
 
@@ -30,6 +31,12 @@ public class RoundManager : MonoBehaviour
         if (roundNumber > maxRounds)
         {
             // Win (Add Winning Screen)
+        }
+        if(roundNumber == 5 || roundNumber == 10){
+            isboss = true;
+        }
+        else {
+            isboss = false;
         }
         // If all enemies are dead start next round after certain amount of time
         if (numSpawners == 0)
@@ -63,8 +70,12 @@ public class RoundManager : MonoBehaviour
 
     void SpawnSpawners()
     {
-        int rand = Random.Range(0, 17); // Change range later to specialize rounds later
+        int rand = Random.Range(0, 16); // Change range later to specialize rounds later
+        if(isboss){
+            rand = 17;
+        }
         var spawner = Instantiate(availableSpawners[rand], transform);
+        
         // Randomize placement of spawner's x and z values
         float x = Random.Range(100, 125);
         float z = Random.Range(100, 125);
