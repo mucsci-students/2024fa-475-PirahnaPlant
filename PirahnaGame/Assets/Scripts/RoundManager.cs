@@ -66,9 +66,9 @@ public class RoundManager : MonoBehaviour
         int rand = Random.Range(0, 17); // Change range later to specialize rounds later
         var spawner = Instantiate(availableSpawners[rand], transform);
         // Randomize placement of spawner's x and z values
-        float x = Random.Range(-50, 50);
-        float z = Random.Range(-50, 50);
-        Vector3 pos = new Vector3(x, 5, z);
+        float x = Random.Range(-50, 0);
+        float z = Random.Range(-50, 0);
+        Vector3 pos = new Vector3(x, 101, z);
         spawner.transform.position = pos;
         spawner.transform.SetParent(this.transform);
         ++numSpawners;
