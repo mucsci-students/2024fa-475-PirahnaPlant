@@ -13,10 +13,14 @@ public class EnemyAI : MonoBehaviour
     public bool suicidal;
 
     private Animator anim;
-
+    private int whoTarget;
 
     private void Start()
     {
+        // Generate a random value 1 or 0 
+        // If 0 enemy will target core no matter what
+        // If 1 enemy will target closest turret or player
+        whoTarget = Random.Range(0, 2);
         if (GetComponent<Animator>() != null)
         {
             anim = GetComponent<Animator>();
@@ -49,13 +53,17 @@ public class EnemyAI : MonoBehaviour
 
     private void UpdateTarget()
     {
-        GameObject core = GameObject.FindGameObjectWithTag("Core");
-        if (core != null)
+        // Enemy will only target core
+        if (whoTarget == 0)
         {
-            target = core.transform;
-            return;
+            GameObject core = GameObject.FindGameObjectWithTag("Core");
+            if (core != null)
+            {
+                target = core.transform;
+                return;
+            }
         }
-
+        
         GameObject player = FindClosestObjectWithTag("Player");
         GameObject turret = FindClosestObjectWithTag("Turret");
 
@@ -119,8 +127,19 @@ public class EnemyAI : MonoBehaviour
                     attackTimer -= Time.deltaTime;
                 } else
                 {
-                    healthScript.ChangeHealth(-damage);
-                    attackTimer = attackCooldown;
+                    if (collision.gameObject.CompareTag("Core"))
+                    {
+                        healthScript.CoreDamage(-damage);
+                        attackTimer = attackCooldown;
+                    } else if (collision.gameObject.CompareTag("Turret"))
+                    {
+                        healthScript.TurretDamage(-damage);
+                    }
+                    {
+                        healthScript.ChangeHealth(-damage);
+                        attackTimer = attackCooldown;
+                    }
+                    
                 }
                   
             }
