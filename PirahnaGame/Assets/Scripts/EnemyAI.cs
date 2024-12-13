@@ -14,12 +14,18 @@ public class EnemyAI : MonoBehaviour
 
     private Animator anim;
     private int whoTarget;
+    private PauseMenu pauseMenu;
 
     private void Start()
     {
         // Generate a random value 1 or 0 
         // If 0 enemy will target core no matter what
         // If 1 enemy will target closest turret or player
+        GameObject menuManager = GameObject.Find("MenuManager"); // Assuming the object is named "MenuManager"
+        if (menuManager != null)
+        {
+            pauseMenu = menuManager.GetComponent<PauseMenu>();
+        }
         whoTarget = Random.Range(0, 4);
         if (GetComponent<Animator>() != null)
         {
@@ -30,6 +36,7 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
+        if (pauseMenu != null && pauseMenu.paused) return;
         UpdateTarget();
 
         if (target != null)

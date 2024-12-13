@@ -15,7 +15,15 @@ public class TurretTargeting : MonoBehaviour
     public float maxUpAngle = -17f; // Max angle for aiming up (negative for upwards)
     public float maxDownAngle = 20f; // Max angle for aiming down
     private float lastAttackTime = 0f;
+    private PauseMenu pauseMenu;
 
+    void Start(){
+        GameObject menuManager = GameObject.Find("MenuManager"); // Assuming the object is named "MenuManager"
+        if (menuManager != null)
+        {
+            pauseMenu = menuManager.GetComponent<PauseMenu>();
+        }
+    }
     void Update()
     {
         if (!disabled)

@@ -6,10 +6,10 @@ public class TurretPlacement : MonoBehaviour
 {
     [SerializeField] GameObject[] turrets;
     [SerializeField] GameObject currentTurret;
-    private int shotgunCost = 25;
-    private int missileCost = 250;
-    private int laserCost = 75;
-    private int machineCost = 150;
+    private int shotgunCost = 35;
+    private int missileCost = 450;
+    private int laserCost = 80;
+    private int machineCost = 200;
     private int currCost = 0;
     private Transform currentTransform;
     

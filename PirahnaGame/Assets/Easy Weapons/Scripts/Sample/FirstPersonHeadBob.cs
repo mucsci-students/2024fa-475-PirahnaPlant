@@ -48,11 +48,15 @@ public class FirstPersonHeadBob : MonoBehaviour {
 	Vector3 prevPosition;								// the position from last frame
 	Vector3 prevVelocity = Vector3.zero;				// the velocity from last frame
 	bool prevGrounded = true;							// whether the character was grounded last frame
-
+	private PauseMenu pauseMenu;
 
 	// Use this for initialization
 	void Start () {
-
+		GameObject menuManager = GameObject.Find("MenuManager"); // Assuming the object is named "MenuManager"
+        if (menuManager != null)
+        {
+            pauseMenu = menuManager.GetComponent<PauseMenu>();
+        }
 		originalLocalPos = head.localPosition;
 		character = GetComponent<FirstPersonCharacter>();
 		if (GetComponent<AudioSource>() == null)
@@ -68,7 +72,7 @@ public class FirstPersonHeadBob : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-
+		if (pauseMenu != null && pauseMenu.paused) return;
 		// we use the actual distance moved as the velocity since last frame, rather than reading
 		//the rigidbody's velocity, because this prevents the 'running against a wall' effect.
 		Vector3 velocity = (GetComponent<Rigidbody>().position - prevPosition) / Time.deltaTime;

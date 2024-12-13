@@ -71,7 +71,7 @@ public class SmartBulletHoleGroup
 // The Weapon class itself handles the weapon mechanics
 public class Weapon : MonoBehaviour
 {
-	
+	private PauseMenu pauseMenu;
 
 	// Weapon Type
 	public WeaponType type = WeaponType.Projectile;		// Which weapon system should be used
@@ -221,6 +221,11 @@ public class Weapon : MonoBehaviour
 		// Calculate the actual ROF to be used in the weapon systems.  The rateOfFire variable is
 		// designed to make it easier on the user - it represents the number of rounds to be fired
 		// per second.  Here, an actual ROF decimal value is calculated that can be used with timers.
+		GameObject menuManager = GameObject.Find("MenuManager"); // Assuming the object is named "MenuManager"
+		if (menuManager != null)
+		{
+    	pauseMenu = menuManager.GetComponent<PauseMenu>();
+		}
 		if (rateOfFire != 0)
 			actualROF = 1.0f / rateOfFire;
 		else
@@ -576,6 +581,7 @@ public class Weapon : MonoBehaviour
 	// Raycasting system
 	public void Fire()
 	{
+		if (pauseMenu != null && pauseMenu.paused) return;
 		// Reset the fireTimer to 0 (for ROF)
 		fireTimer = 0.0f;
 
@@ -817,6 +823,7 @@ public class Weapon : MonoBehaviour
 	// Projectile system
 	public void Launch()
 	{
+		if (pauseMenu != null && pauseMenu.paused) return;
 		// Reset the fire timer to 0 (for ROF)
 		fireTimer = 0.0f;
 
@@ -1078,6 +1085,7 @@ public class Weapon : MonoBehaviour
 	// When the weapon tries to fire without any ammo
 	void DryFire()
 	{
+		if (pauseMenu != null && pauseMenu.paused) return;
 		GetComponent<AudioSource>().PlayOneShot(dryFireSound);
 	}
 
