@@ -20,7 +20,7 @@ public class EnemyAI : MonoBehaviour
         // Generate a random value 1 or 0 
         // If 0 enemy will target core no matter what
         // If 1 enemy will target closest turret or player
-        whoTarget = Random.Range(0, 2);
+        whoTarget = Random.Range(0, 4);
         if (GetComponent<Animator>() != null)
         {
             anim = GetComponent<Animator>();
@@ -134,9 +134,11 @@ public class EnemyAI : MonoBehaviour
                     } else if (collision.gameObject.CompareTag("Turret"))
                     {
                         healthScript.TurretDamage(-damage);
+                        attackTimer = attackCooldown;
                     }
+                    else
                     {
-                        healthScript.ChangeHealth(-damage);
+                        healthScript.PlayerDamage(-damage);
                         attackTimer = attackCooldown;
                     }
                     

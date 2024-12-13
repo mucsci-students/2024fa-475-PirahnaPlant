@@ -127,6 +127,10 @@ public class Health : MonoBehaviour
                 // Do Nothing
             }
         }
+		else if (isPlayer)
+		{
+			// Do Nothing
+		} 
 		else
 		{
 			// Change the health by the amount specified in the amount variable
@@ -220,10 +224,10 @@ public class Health : MonoBehaviour
 		}
     }
 
-	public void CoreDamage(float damage)
+	public void CoreDamage(float amount)
 	{
 		// Change the health by the amount specified in the amount variable
-		currentHealth += damage;
+		currentHealth += amount;
 		if (healthbar != null)
 		{
 			healthbar.value = currentHealth;
@@ -251,6 +255,33 @@ public class Health : MonoBehaviour
         if (currentHealth <= 0 && !dead && canDie)
         {
             Die();
+        }
+        // Make sure that the health never exceeds the maximum health
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+    }
+
+	public void PlayerDamage(float amount)
+	{
+        // Change the health by the amount specified in the amount variable
+        currentHealth += amount;
+        if (healthbar != null)
+        {
+            healthbar.value = currentHealth;
+        }
+        // If the health runs out, then Die.
+        if (currentHealth <= 0 && !dead && canDie)
+            Die();
+
+        else if (currentHealth <= 0 && isPlayer)
+        {
+            if (respawnScript != null)
+            {
+                currentHealth = maxHealth;
+                respawnScript.RespawnPlayer();  // Respawn at the designated respawn point
+            }
         }
         // Make sure that the health never exceeds the maximum health
         if (currentHealth > maxHealth)
